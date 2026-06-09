@@ -205,6 +205,7 @@ def validate_upload(uploaded_file) -> str:
         return "The uploaded file exceeds the 10MB maximum size limit."
     return ""
 
+
 # Styling
 st.markdown(
     """
@@ -552,6 +553,7 @@ with header_col2:
         unsafe_allow_html=True,
     )
 
+
 def classify_skills(skills):
     soft_keywords = {
         "leadership",
@@ -613,6 +615,7 @@ def calculate_dashboard_scores(profile):
         "status": status,
     }
 
+
 if "document_record" not in st.session_state:
     st.session_state.document_record = None
 if "candidate_profile" not in st.session_state:
@@ -621,10 +624,6 @@ if "debug_messages" not in st.session_state:
     st.session_state.debug_messages = []
 if "recent_analyses" not in st.session_state:
     st.session_state.recent_analyses = []
-if "candidate_profile" not in st.session_state:
-    st.session_state.candidate_profile = None
-if "debug_messages" not in st.session_state:
-    st.session_state.debug_messages = []
 
 # Main layout
 left_col, right_col = st.columns([1.1, 1.9], gap="large")
@@ -651,12 +650,16 @@ with left_col:
             help="Upload a PDF resume for extraction",
             label_visibility="collapsed",
         )
+
         if uploaded_file is None:
             if st.session_state.document_record is not None or st.session_state.candidate_profile is not None:
                 st.session_state.document_record = None
                 st.session_state.candidate_profile = None
                 st.session_state.debug_messages = []
-            st.markdown("<div style='margin-top:1rem; color:#64748b;'>No file uploaded. Upload a PDF to begin the analysis.</div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div style='margin-top:1rem; color:#64748b;'>No file uploaded. Upload a PDF to begin the analysis.</div>",
+                unsafe_allow_html=True,
+            )
         else:
             validation_error = validate_upload(uploaded_file)
             if validation_error:
@@ -713,7 +716,6 @@ with left_col:
                                 st.session_state.recent_analyses = st.session_state.recent_analyses[:5]
                         except Exception as exc:
                             logger.exception("Candidate profile generation failed")
-                            # Try to extract a recommended retry delay from the exception message
                             retry_seconds = None
                             try:
                                 text = str(exc)
@@ -743,7 +745,8 @@ with left_col:
 
         if st.session_state.document_record:
             st.markdown(
-                f"<div class='small-note' style='margin-top:1rem; color:#0f172a;'><strong>File:</strong> {st.session_state.document_record['file_name']}</div>",
+                f"<div class='small-note' style='margin-top:1rem; color:#0f172a;'>"
+                f"<strong>File:</strong> {st.session_state.document_record['file_name']}</div>",
                 unsafe_allow_html=True,
             )
             st.text_area(
@@ -757,7 +760,9 @@ with left_col:
     with st.container():
         st.markdown("<div class='dashboard-card'>", unsafe_allow_html=True)
         st.markdown(
-            "<div class='section-title'>Recent Analyses <span style='float:right; font-size:0.92rem;'><a class='view-all'>View All</a></span></div>",
+            "<div class='section-title'>Recent Analyses "
+            "<span style='float:right; font-size:0.92rem;'><a class='view-all'>View All</a></span>"
+            "</div>",
             unsafe_allow_html=True,
         )
         if st.session_state.recent_analyses:
@@ -820,31 +825,24 @@ with right_col:
                     f"</div>",
                     unsafe_allow_html=True,
                 )
-           with right:
-            st.markdown(
-                f"<a class='action-button btn-share' href='{email_link}' target='_blank'>✉️</a>",
-                unsafe_allow_html=True,
-            )
-
-            st.markdown(
-                f"<a class='action-button btn-share' href='{whatsapp_link}' target='_blank'>💬</a>",
-                unsafe_allow_html=True,
-            )
-
-            export_content = build_export_pdf(
-                profile,
-                st.session_state.document_record
-            )
-
-            export_filename = build_export_filename(profile)
-
-            st.download_button(
-                label="📥",
-                data=export_content,
-                file_name=export_filename,
-                mime="application/pdf",
-                key="export_report",
-            )
+            with right:
+                st.markdown(
+                    f"<a class='action-button btn-share' href='{email_link}' target='_blank'>✉️</a>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(
+                    f"<a class='action-button btn-share' href='{whatsapp_link}' target='_blank'>💬</a>",
+                    unsafe_allow_html=True,
+                )
+                export_content = build_export_pdf(profile, st.session_state.document_record)
+                export_filename = build_export_filename(profile)
+                st.download_button(
+                    label="📥",
+                    data=export_content,
+                    file_name=export_filename,
+                    mime="application/pdf",
+                    key="export_report",
+                )
         else:
             st.markdown(
                 f"<div style='display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;'>"
@@ -855,7 +853,11 @@ with right_col:
                 f"</div></div>",
                 unsafe_allow_html=True,
             )
-        st.markdown(f"<div class='circle-score'>{metrics['overall_score']}</div>", unsafe_allow_html=True)
+
+        st.markdown(
+            f"<div class='circle-score'>{metrics['overall_score']}</div>",
+            unsafe_allow_html=True,
+        )
         st.markdown(
             f"<div style='text-align:center; color:#374151; font-weight:600; margin-bottom:1rem;'>{metrics['status']}</div>"
             f"<div style='display:grid; gap:1rem;'>"
@@ -890,7 +892,10 @@ with right_col:
                 f"<div style='flex:1 1 16rem; min-width:16rem;'>"
                 f"<div style='font-weight:600; color:#475569; margin-bottom:0.5rem;'>Skills</div>"
                 f"<div class='tag-grid'>"
-                + "".join([f"<span class='tag-pill tag-technical'>{skill}</span>" for skill in profile.get('skills', [])])
+                + "".join([
+                    f"<span class='tag-pill tag-technical'>{skill}</span>"
+                    for skill in profile.get("skills", [])
+                ])
                 + "</div>"
                 f"</div>"
                 f"</div>",
@@ -903,15 +908,21 @@ with right_col:
                 "</div>"
                 "<div style='margin-top:1rem;'>"
                 f"<div style='font-weight:700; color:#0f172a; margin-bottom:0.55rem;'>Education</div>"
-                + "".join(
-                    [f"<div style='color:#475569; line-height:1.6;'>• {edu}</div>" for edu in profile.get('education', [])]
-                )
+                + "".join([
+                    f"<div style='color:#475569; line-height:1.6;'>• {edu}</div>"
+                    for edu in profile.get("education", [])
+                ])
                 + "</div>"
                 "<div style='margin-top:1rem;'>"
                 f"<div style='font-weight:700; color:#0f172a; margin-bottom:0.55rem;'>Recommendations</div>"
-                + ("<div style='color:#475569; line-height:1.6;'>NA</div>" if not profile.get('recommendations') else "".join(
-                    [f"<div style='color:#475569; line-height:1.6;'>• {rec}</div>" for rec in profile.get('recommendations', [])]
-                ))
+                + (
+                    "<div style='color:#475569; line-height:1.6;'>NA</div>"
+                    if not profile.get("recommendations")
+                    else "".join([
+                        f"<div style='color:#475569; line-height:1.6;'>• {rec}</div>"
+                        for rec in profile.get("recommendations", [])
+                    ])
+                )
                 + "</div>",
                 unsafe_allow_html=True,
             )
@@ -927,7 +938,9 @@ with right_col:
 
         if not skills:
             st.markdown(
-                "<div style='color:#64748b; margin-bottom:1rem;'>Upload a resume to extract skills and populate the assessment.</div>",
+                "<div style='color:#64748b; margin-bottom:1rem;'>"
+                "Upload a resume to extract skills and populate the assessment."
+                "</div>",
                 unsafe_allow_html=True,
             )
 
@@ -936,9 +949,14 @@ with right_col:
             "<div style='flex:1 1 20rem;'>"
             "<div style='font-weight:700; margin-bottom:0.8rem;'>Technical Skills Detected</div>"
             "<div class='tag-grid'>"
-            + ("<span style='color:#475569;'>NA</span>" if not technical_skills else "".join(
-                [f"<span class='tag-pill tag-technical'>{skill}</span>" for skill in technical_skills]
-            ))
+            + (
+                "<span style='color:#475569;'>NA</span>"
+                if not technical_skills
+                else "".join([
+                    f"<span class='tag-pill tag-technical'>{skill}</span>"
+                    for skill in technical_skills
+                ])
+            )
             + "</div></div>",
             unsafe_allow_html=True,
         )
@@ -946,13 +964,19 @@ with right_col:
             "<div style='flex:1 1 20rem;'>"
             "<div style='font-weight:700; margin-bottom:0.8rem;'>Soft Skills Identified</div>"
             "<div class='tag-grid'>"
-            + ("<span style='color:#475569;'>NA</span>" if not soft_skills else "".join(
-                [f"<span class='tag-pill tag-soft'>{skill}</span>" for skill in soft_skills]
-            ))
+            + (
+                "<span style='color:#475569;'>NA</span>"
+                if not soft_skills
+                else "".join([
+                    f"<span class='tag-pill tag-soft'>{skill}</span>"
+                    for skill in soft_skills
+                ])
+            )
             + "</div></div>",
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
+
         required_count = len(technical_skills)
         preferred_count = len(soft_skills)
         extra_skills_count = max(0, len(skills) - 5)
