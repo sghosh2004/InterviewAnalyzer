@@ -820,28 +820,31 @@ with right_col:
                     f"</div>",
                     unsafe_allow_html=True,
                 )
-            with right:
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.markdown(
-                        f"<a class='action-button btn-share' href='{email_link}' target='_blank' title='Share via Email'>✉️</a>",
-                        unsafe_allow_html=True,
-                    )
-                with col2:
-                    st.markdown(
-                        f"<a class='action-button btn-share' href='{whatsapp_link}' target='_blank' title='Share via WhatsApp'>💬</a>",
-                        unsafe_allow_html=True,
-                    )
-                with col3:
-                    export_content = build_export_pdf(profile, st.session_state.document_record)
-                    export_filename = build_export_filename(profile)
-                    st.download_button(
-                        label="📥",
-                        data=export_content,
-                        file_name=export_filename,
-                        mime="application/pdf",
-                        key="export_report",
-                    )
+           with right:
+            st.markdown(
+                f"<a class='action-button btn-share' href='{email_link}' target='_blank'>✉️</a>",
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                f"<a class='action-button btn-share' href='{whatsapp_link}' target='_blank'>💬</a>",
+                unsafe_allow_html=True,
+            )
+
+            export_content = build_export_pdf(
+                profile,
+                st.session_state.document_record
+            )
+
+            export_filename = build_export_filename(profile)
+
+            st.download_button(
+                label="📥",
+                data=export_content,
+                file_name=export_filename,
+                mime="application/pdf",
+                key="export_report",
+            )
         else:
             st.markdown(
                 f"<div style='display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;'>"
