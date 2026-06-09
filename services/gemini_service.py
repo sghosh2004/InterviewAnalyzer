@@ -45,6 +45,13 @@ def _load_env_file(env_path: Optional[str] = None) -> None:
 _load_env_file()
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+
+if not GEMINI_API_KEY:
+    try:
+        import streamlit as st
+        GEMINI_API_KEY = st.secrets.get("GEMINI_API_KEY", "")
+    except Exception:
+        pass
 DEFAULT_GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 DEFAULT_MAX_OUTPUT_TOKENS = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "800"))
 DEFAULT_MAX_ATTEMPTS = int(os.environ.get("GEMINI_MAX_ATTEMPTS", "4"))
