@@ -26,7 +26,7 @@ Instead, add secrets to Streamlit Cloud dashboard:
 - Click "Advanced settings" → "Secrets"
 - Copy your local `.env` contents:
 ```
-GEMINI_API_KEY=AQ.Ab8RN6ItFe5f7TYJxzYaSS4M0ZwgsZtlKQ8OryDo7jcC_Ln-Ew
+GEMINI_API_KEY=AQ.Ab8RN6ItFe5f7TYJxzYaSS4M0ZwgsZtlKQ8OryDo7jc
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_MAX_OUTPUT_TOKENS=1200
 GEMINI_MAX_ATTEMPTS=3

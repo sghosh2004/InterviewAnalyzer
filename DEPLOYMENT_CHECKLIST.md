@@ -57,7 +57,7 @@ Branch 'main' set up to track remote branch 'main' from 'origin'.
 6. Go to **"Secrets"** tab
 7. Paste this exactly:
 ```
-GEMINI_API_KEY=AQ.Ab8RN6ItFe5f7TYJxzYaSS4M0ZwgsZtlKQ8OryDo7jcC_Ln-Ew
+GEMINI_API_KEY=AQ.Ab8RN6ItFe5f7TYJxzYaSS4M0ZwgsZtlKQ8OryDo7jcC_
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_MAX_OUTPUT_TOKENS=1200
 GEMINI_MAX_ATTEMPTS=3
